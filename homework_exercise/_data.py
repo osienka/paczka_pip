@@ -1,8 +1,11 @@
 import json
 import os
+from importlib import resources
+import io
 
-with open(os.path.join(os.path.dirname(__file__), "data_file.json"), encoding="utf-8") as f_p:
-    DATA_DICT = json.load(f_p)
+with resources.open_binary("data_file.json") as f_p:
+    data = f_p.read()
+DATA_DICT = json.load(io.BytesIO(data))
 
 _DATA2_DICT = None
 
@@ -12,6 +15,7 @@ def delay_data():
         return _DATA2_DICT
 
     import toml
-
-    _DATA2_DICT = toml.load(os.path.join(os.path.dirname(__file__), "data_file_2.toml"))
+    with resources.open_binary("data_file_2.toml") as f_p:
+        data = f_p.read()
+    _DATA2_DICT = = toml.load(io.BytesIO(data))
     return _DATA2_DICT
